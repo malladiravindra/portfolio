@@ -32,7 +32,13 @@ def env_list(name: str, default: str = '') -> list[str]:
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'insecure-dev-key-do-not-use-in-production')
 DEBUG = env_bool('DEBUG', True)
-ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1,portifolo-1.onrender.com,.onrender.com')
+
+# Automatically add Render's external hostname if running on Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -121,8 +127,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Only the React frontend's origin(s) may call this API from a browser.
 
 CORS_ALLOWED_ORIGINS = env_list(
-    'CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173'
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:5173,http://127.0.0.1:5173,'
 )
+
+
 
 # --- Django REST Framework ----------------------------------------------------
 

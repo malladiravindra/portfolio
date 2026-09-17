@@ -13,4 +13,4 @@ class StackCategorySerializer(serializers.ModelSerializer):
         fields = ['key', 'label', 'items']
 
     def get_items(self, category: StackCategory) -> list[str]:
-        return [item.name for item in category.items.all()]
+        return [item.name for item in category.items.all() if item.is_active]

@@ -6,6 +6,7 @@ from .models import StackCategory, StackItem
 class StackItemInline(admin.TabularInline):
     model = StackItem
     extra = 1
+    fields = ['name', 'icon', 'proficiency', 'is_active', 'order']
 
 
 @admin.register(StackCategory)

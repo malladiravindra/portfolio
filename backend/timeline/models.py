@@ -35,3 +35,18 @@ class TimelineBullet(models.Model):
 
     def __str__(self) -> str:
         return self.text
+
+
+class TimelineTech(models.Model):
+    """One tech badge on a TimelineEntry, e.g. "Django" on an experience entry."""
+
+    entry = models.ForeignKey(TimelineEntry, related_name='technologies', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name_plural = 'Timeline tech badges'
+
+    def __str__(self) -> str:
+        return self.name

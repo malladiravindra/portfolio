@@ -1,17 +1,11 @@
 import { motion } from 'framer-motion'
 import { Briefcase } from 'lucide-react'
 import SectionHeader from './SectionHeader'
-import { commits } from '../data/timeline'
+import { TimelineEntry } from '../lib/api'
 
-const experience = commits.filter((c) => c.type === 'experience')
+export default function ExperienceTimeline({ entries }: { entries: TimelineEntry[] }) {
+  if (entries.length === 0) return null
 
-// Technologies named explicitly in each entry's responsibilities below —
-// pulled out as tags, not invented.
-const TECHNOLOGIES: Record<string, string[]> = {
-  a1c9f3e: ['Django', 'React', 'DRF', 'PostgreSQL', 'MySQL', 'JWT', 'RBAC', 'Postman', 'Git'],
-}
-
-export default function ExperienceTimeline() {
   return (
     <section id="experience" className="container-page scroll-mt-16 py-16 sm:py-24">
       <SectionHeader eyebrow="Experience" title="Where I've worked" />
@@ -29,7 +23,7 @@ export default function ExperienceTimeline() {
           />
         </div>
 
-        {experience.map((c, i) => {
+        {entries.map((c, i) => {
           const [role, org] = c.org.split(' · ')
           return (
             <motion.div
@@ -64,9 +58,9 @@ export default function ExperienceTimeline() {
                     </li>
                   ))}
                 </ul>
-                {TECHNOLOGIES[c.hash] && (
+                {c.technologies.length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-1.5">
-                    {TECHNOLOGIES[c.hash].map((t) => (
+                    {c.technologies.map((t) => (
                       <span
                         key={t}
                         className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"

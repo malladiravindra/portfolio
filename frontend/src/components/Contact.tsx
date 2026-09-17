@@ -1,10 +1,8 @@
 import { FormEvent, useState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2, Github, Linkedin, Loader2, Mail } from 'lucide-react'
-import { site } from '../data/site'
+import { api, Profile } from '../lib/api'
 import { btnPrimary, btnSecondary } from '../styles/buttons'
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000'
 
 const container = {
   hidden: {},
@@ -18,7 +16,7 @@ const item = {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
-export default function Contact() {
+export default function Contact({ profile }: { profile: Profile }) {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState<string | null>(null)
 
@@ -38,17 +36,7 @@ export default function Contact() {
     }
 
     try {
-      const res = await fetch(`${API_URL}/api/contact/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        const message =
-          (body && (body.detail || Object.values(body).flat()[0])) || 'Something went wrong. Please try again.'
-        throw new Error(String(message))
-      }
+      await api.contact(payload)
       setStatus('success')
       form.reset()
     } catch (err) {
@@ -77,13 +65,13 @@ export default function Contact() {
           </motion.p>
 
           <motion.div variants={item} className="mt-6 flex flex-wrap gap-3">
-            <a href={`mailto:${site.email}`} className={`px-4 py-2.5 ${btnPrimary}`}>
+            <a href={`mailto:${profile.email}`} className={`px-4 py-2.5 ${btnPrimary}`}>
               <Mail size={16} /> Email Me
             </a>
-            <a href={site.linkedin} target="_blank" rel="noreferrer" className={`px-4 py-2.5 ${btnSecondary}`}>
+            <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className={`px-4 py-2.5 ${btnSecondary}`}>
               <Linkedin size={16} /> LinkedIn
             </a>
-            <a href={site.github} target="_blank" rel="noreferrer" className={`px-4 py-2.5 ${btnSecondary}`}>
+            <a href={profile.github_url} target="_blank" rel="noreferrer" className={`px-4 py-2.5 ${btnSecondary}`}>
               <Github size={16} /> GitHub
             </a>
           </motion.div>

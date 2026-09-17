@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Download, Github, Linkedin, Mail } from 'lucide-react'
-import { site } from '../data/site'
+import { Profile } from '../lib/api'
 import { btnPrimary, btnSecondary, btnGhost } from '../styles/buttons'
-import HeroVisual from './HeroVisual'
 
 const container = {
   hidden: {},
@@ -16,7 +15,8 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 }
 
-export default function Hero() {
+export default function Hero({ profile }: { profile: Profile }) {
+  const shortName = profile.short_name || profile.name
   return (
     <section id="top" className="relative scroll-mt-16 overflow-hidden pb-16 pt-20 sm:pb-24 sm:pt-28">
       {/* extremely subtle backdrop — a faint dot grid + a slow, low-opacity glow */}
@@ -37,7 +37,7 @@ export default function Hero() {
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="container-page relative">
         <motion.div variants={container} initial="hidden" animate="visible" className="max-w-3xl">
           <motion.p variants={item} className="text-base font-medium text-slate-500 dark:text-slate-400 sm:text-lg">
             Hi, I&apos;m
@@ -46,16 +46,16 @@ export default function Hero() {
             variants={item}
             className="mt-1 font-heading text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl"
           >
-            {site.shortName}
+            {shortName}
           </motion.h1>
           <motion.p variants={item} className="mt-4 text-xl font-semibold text-accent sm:text-2xl">
-            {site.role}
+            {profile.role}
           </motion.p>
           <motion.p
             variants={item}
             className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg"
           >
-            {site.tagline}
+            {profile.tagline}
           </motion.p>
 
           <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3">
@@ -66,14 +66,14 @@ export default function Hero() {
             <a href="#contact" className={`px-5 py-2.5 ${btnSecondary}`}>
               Contact Me
             </a>
-            <a href={site.resume} download className={`px-5 py-2.5 ${btnGhost}`}>
+            <a href={profile.resume_url} download className={`px-5 py-2.5 ${btnGhost}`}>
               <Download size={16} /> Download Resume
             </a>
           </motion.div>
 
           <motion.div variants={item} className="mt-8 flex items-center gap-4 text-slate-500 dark:text-slate-400">
             <a
-              href={site.github}
+              href={profile.github_url}
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub"
@@ -82,7 +82,7 @@ export default function Hero() {
               <Github size={20} />
             </a>
             <a
-              href={site.linkedin}
+              href={profile.linkedin_url}
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn"
@@ -91,21 +91,13 @@ export default function Hero() {
               <Linkedin size={20} />
             </a>
             <a
-              href={`mailto:${site.email}`}
+              href={`mailto:${profile.email}`}
               aria-label="Email"
               className="transition-all duration-300 ease-out hover:-translate-y-0.5 hover:text-accent"
             >
               <Mail size={20} />
             </a>
           </motion.div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}
-        >
-          <HeroVisual />
         </motion.div>
       </div>
     </section>

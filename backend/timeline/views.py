@@ -9,5 +9,5 @@ class TimelineView(APIView):
     """GET /api/timeline/ — experience + education entries, in display order."""
 
     def get(self, request, *args, **kwargs):
-        entries = TimelineEntry.objects.prefetch_related('bullets').all()
+        entries = TimelineEntry.objects.prefetch_related('bullets', 'technologies').all()
         return Response(TimelineEntrySerializer(entries, many=True).data)

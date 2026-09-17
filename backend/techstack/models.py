@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -21,6 +22,15 @@ class StackItem(models.Model):
 
     category = models.ForeignKey(StackCategory, related_name='items', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    icon = models.CharField(
+        max_length=60, blank=True,
+        help_text='Optional lucide-react icon name, e.g. "server".',
+    )
+    proficiency = models.PositiveSmallIntegerField(
+        default=80, validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text='0-100, used for skill-level indicators.',
+    )
+    is_active = models.BooleanField(default=True, help_text='Unchecking hides this skill from the public API.')
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

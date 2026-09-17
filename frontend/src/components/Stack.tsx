@@ -1,17 +1,23 @@
-import { Database, Layout, Server, Wrench } from 'lucide-react'
+import { Boxes, Database, Layout, PlugZap, Server, TestTube2, Wrench, Zap } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import SectionHeader from './SectionHeader'
 import SkillCard from './SkillCard'
-import { skills } from '../data/techstack'
+import { SkillGroup } from '../lib/api'
 
 const ICONS: Record<string, LucideIcon> = {
+  languages: Boxes,
   backend: Server,
   frontend: Layout,
-  database: Database,
-  other: Wrench,
+  databases: Database,
+  apis_auth: PlugZap,
+  realtime: Zap,
+  testing: TestTube2,
+  tools: Wrench,
 }
 
-export default function Stack() {
+export default function Stack({ skills }: { skills: SkillGroup[] }) {
+  if (skills.length === 0) return null
+
   return (
     <section id="skills" className="container-page scroll-mt-16 py-16 sm:py-24">
       <SectionHeader eyebrow="Skills" title="Technologies I work with" />

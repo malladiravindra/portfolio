@@ -1,17 +1,26 @@
 import { motion } from 'framer-motion'
-import { Database, GitBranch, Layout, Server } from 'lucide-react'
+import { Database, GitBranch, Layout, Server, Wrench } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import SectionHeader from './SectionHeader'
 import SkillCard from './SkillCard'
-import { site } from '../data/site'
+import { Profile, SkillGroup } from '../lib/api'
 
-const INFO_CARDS = [
-  { icon: Server, title: 'Backend', items: ['Django', 'DRF'] },
-  { icon: Layout, title: 'Frontend', items: ['React', 'Next.js'] },
-  { icon: Database, title: 'Database', items: ['MySQL', 'SQL'] },
-  { icon: GitBranch, title: 'Development', items: ['REST APIs', 'Git'] },
-]
+const ICONS: Record<string, LucideIcon> = {
+  backend: Server,
+  frontend: Layout,
+  database: Database,
+  databases: Database,
+  other: GitBranch,
+}
 
-export default function About() {
+export default function About({ profile, skills }: { profile: Profile; skills: SkillGroup[] }) {
+  const paragraphs = (profile.detailed_bio || profile.tagline)
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+
+  const infoCards = skills.slice(0, 4)
+
   return (
     <section id="about" className="container-page scroll-mt-16 py-16 sm:py-24">
       <SectionHeader eyebrow="About" title="A bit about me" />
@@ -24,24 +33,20 @@ export default function About() {
           transition={{ duration: 0.5 }}
           className="space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-300"
         >
-          <p>
-            I&apos;m a B.Tech Computer Science graduate and a Python/Django backend developer who also
-            builds the React and Next.js interfaces on top, based in {site.location}.
-          </p>
-          <p>
-            My work centers on designing REST APIs with Django REST Framework, modeling and querying
-            relational databases, and building the frontend that consumes those APIs — end to end,
-            from schema to UI.
-          </p>
-          <p>
-            I&apos;m interested in building real-world applications and currently open to opportunities
-            as a Python, Django, or full stack developer.
-          </p>
+          {paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
         </motion.div>
 
         <div className="grid grid-cols-2 gap-4">
-          {INFO_CARDS.map((card, i) => (
-            <SkillCard key={card.title} icon={card.icon} title={card.title} items={card.items} delay={i * 0.08} />
+          {infoCards.map((card, i) => (
+            <SkillCard
+              key={card.key}
+              icon={ICONS[card.key] ?? Wrench}
+              title={card.label}
+              items={card.items}
+              delay={i * 0.08}
+            />
           ))}
         </div>
       </div>

@@ -1,22 +1,8 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Github } from 'lucide-react'
 import SectionHeader from './SectionHeader'
-import { projects } from '../data/projects'
-import { site } from '../data/site'
+import { Project } from '../lib/api'
 import { btnPrimary } from '../styles/buttons'
-
-// The richest, most-detailed shipped project in projects.ts — used here for a
-// deeper Problem/Solution/Features walkthrough on top of its grid card above.
-const featured = projects.find((p) => p.slug === 'budget-management-platform')
-
-const KEY_FEATURES = [
-  'Drag-and-drop Kanban board for budget items',
-  'Real-time time tracking over WebSockets',
-  'Background task processing with Celery',
-  'Excel / PDF financial reporting',
-  'Profit Margin KPI dashboard',
-  'Role-based access control (RBAC) enforced on both frontend and backend',
-]
 
 const container = {
   hidden: {},
@@ -28,8 +14,12 @@ const item = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
 }
 
-export default function FeaturedProject() {
-  if (!featured) return null
+export default function FeaturedProject({ project }: { project?: Project }) {
+  if (!project) return null
+
+  const githubHref = project.github_url || project.link
+  const problem = project.problem_statement
+  const features = project.key_features
 
   return (
     <section className="container-page scroll-mt-16 py-16 sm:py-24">
@@ -43,39 +33,40 @@ export default function FeaturedProject() {
           viewport={{ once: true, amount: 0.25 }}
         >
           <motion.h3 variants={item} className="font-heading text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
-            {featured.name}
+            {project.name}
           </motion.h3>
           <motion.p variants={item} className="mt-1 font-medium text-accent">
-            {featured.tagline}
+            {project.tagline}
           </motion.p>
 
           <div className="mt-6 space-y-5 text-sm sm:text-base">
-            <motion.div variants={item}>
-              <h4 className="font-semibold text-slate-900 dark:text-white">Problem</h4>
-              <p className="mt-1 leading-relaxed text-slate-600 dark:text-slate-400">
-                Traditional budgeting tools present numbers as static spreadsheet rows, making it hard
-                to see where money and time are actually going, task by task.
-              </p>
-            </motion.div>
+            {problem && (
+              <motion.div variants={item}>
+                <h4 className="font-semibold text-slate-900 dark:text-white">Problem</h4>
+                <p className="mt-1 leading-relaxed text-slate-600 dark:text-slate-400">{problem}</p>
+              </motion.div>
+            )}
             <motion.div variants={item}>
               <h4 className="font-semibold text-slate-900 dark:text-white">Solution</h4>
-              <p className="mt-1 leading-relaxed text-slate-600 dark:text-slate-400">{featured.description}</p>
+              <p className="mt-1 leading-relaxed text-slate-600 dark:text-slate-400">{project.description}</p>
             </motion.div>
-            <motion.div variants={item}>
-              <h4 className="font-semibold text-slate-900 dark:text-white">Key Features</h4>
-              <ul className="mt-2 space-y-1.5">
-                {KEY_FEATURES.map((f) => (
-                  <li key={f} className="flex gap-2 text-slate-600 dark:text-slate-400">
-                    <span className="text-accent">•</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+            {features.length > 0 && (
+              <motion.div variants={item}>
+                <h4 className="font-semibold text-slate-900 dark:text-white">Key Features</h4>
+                <ul className="mt-2 space-y-1.5">
+                  {features.map((f) => (
+                    <li key={f} className="flex gap-2 text-slate-600 dark:text-slate-400">
+                      <span className="text-accent">•</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
             <motion.div variants={item}>
               <h4 className="font-semibold text-slate-900 dark:text-white">Tech Stack</h4>
               <div className="mt-2 flex flex-wrap gap-1.5">
-                {featured.tech.map((t) => (
+                {project.tech.map((t) => (
                   <span
                     key={t}
                     className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
@@ -89,7 +80,7 @@ export default function FeaturedProject() {
 
           <motion.a
             variants={item}
-            href={featured.link ?? site.github}
+            href={githubHref}
             target="_blank"
             rel="noreferrer"
             className={`group mt-6 px-4 py-2.5 ${btnPrimary}`}

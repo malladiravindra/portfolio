@@ -1,9 +1,9 @@
 """
 Django settings for the portfolio backend.
 
-This project has exactly one job: receive contact-form submissions from the
-React portfolio frontend, store them, and email a notification. Kept small
-on purpose — no more apps than the job needs.
+Serves the public portfolio content (profile, skills, projects, timeline,
+certifications, services) as read-only APIs, and accepts contact-form
+submissions from the React frontend.
 """
 
 from pathlib import Path
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'techstack',
     'projects',
     'timeline',
+    'certifications',
+    'services',
 ]
 
 MIDDLEWARE = [
@@ -137,10 +139,13 @@ CORS_ALLOWED_ORIGINS = env_list(
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
-    'DEFAULT_THROTTLE_CLASSES': ['rest_framework.throttling.AnonRateThrottle'],
+    # No default throttle: the public read-only content endpoints (profile,
+    # techstack, projects, timeline, certifications, services) are cheap DB
+    # reads and every page load fires several of them in parallel — a
+    # low default rate would lock real visitors out after a few page loads.
+    # The contact form gets its own tighter, endpoint-specific limit instead
+    # (see contact/views.py's ScopedRateThrottle).
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '30/hour',
-        # Tighter, endpoint-specific limit — see contact/views.py.
         'contact': '5/hour',
     },
 }

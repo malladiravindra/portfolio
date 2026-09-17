@@ -3,10 +3,30 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { FileText, Github, Linkedin, Menu, X } from 'lucide-react'
 import { Theme } from '../hooks/useTheme'
 import ThemeToggle from './ThemeToggle'
-import { nav, site } from '../data/site'
+import { Profile } from '../lib/api'
 import { btnPrimary } from '../styles/buttons'
 
-export default function Nav({ theme, toggle }: { theme: Theme; toggle: () => void }) {
+const nav = [
+  { id: 'top', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'education', label: 'Education' },
+  { id: 'services', label: 'Services' },
+  { id: 'contact', label: 'Contact' },
+]
+
+export default function Nav({
+  theme,
+  toggle,
+  profile,
+}: {
+  theme: Theme
+  toggle: () => void
+  profile: Profile
+}) {
+  const shortName = profile.short_name || profile.name
   const [active, setActive] = useState('top')
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -41,7 +61,7 @@ export default function Nav({ theme, toggle }: { theme: Theme; toggle: () => voi
     >
       <div className={`container-page flex items-center justify-between gap-4 transition-all duration-300 ${scrolled ? 'h-14' : 'h-16'}`}>
         <a href="#top" className="shrink-0 font-heading font-bold tracking-tight text-slate-900 dark:text-white">
-          {site.shortName}
+          {shortName}
         </a>
 
         <nav className="hidden items-center gap-1 text-sm lg:flex">
@@ -73,13 +93,13 @@ export default function Nav({ theme, toggle }: { theme: Theme; toggle: () => voi
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <IconLink href={site.github} label="GitHub">
+          <IconLink href={profile.github_url} label="GitHub">
             <Github size={17} />
           </IconLink>
-          <IconLink href={site.linkedin} label="LinkedIn">
+          <IconLink href={profile.linkedin_url} label="LinkedIn">
             <Linkedin size={17} />
           </IconLink>
-          <a href={site.resume} download className={`px-3.5 py-2 ${btnPrimary}`}>
+          <a href={profile.resume_url} download className={`px-3.5 py-2 ${btnPrimary}`}>
             <FileText size={15} /> Resume
           </a>
           <ThemeToggle theme={theme} toggle={toggle} />
@@ -121,13 +141,13 @@ export default function Nav({ theme, toggle }: { theme: Theme; toggle: () => voi
                 </a>
               ))}
               <div className="mt-2 flex items-center gap-4 border-t border-slate-200 pt-3 dark:border-slate-800">
-                <IconLink href={site.github} label="GitHub">
+                <IconLink href={profile.github_url} label="GitHub">
                   <Github size={17} />
                 </IconLink>
-                <IconLink href={site.linkedin} label="LinkedIn">
+                <IconLink href={profile.linkedin_url} label="LinkedIn">
                   <Linkedin size={17} />
                 </IconLink>
-                <a href={site.resume} download className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+                <a href={profile.resume_url} download className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
                   <FileText size={15} /> Resume
                 </a>
               </div>

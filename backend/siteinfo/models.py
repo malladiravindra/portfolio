@@ -43,7 +43,10 @@ class Profile(models.Model):
         blank=True,
         help_text='Full About-section bio. Separate paragraphs with a blank line.',
     )
-    profile_image = models.URLField(blank=True, help_text='URL/path to a profile photo, if any.')
+    profile_image = models.CharField(
+        max_length=300, blank=True,
+        help_text='Path or URL to a profile photo, if any — e.g. "/profile.jpg".',
+    )
     availability_status = models.CharField(
         max_length=100, blank=True, default='Open to opportunities',
     )

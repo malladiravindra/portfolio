@@ -60,7 +60,7 @@ export default function App() {
         <ScrollProgress />
         <Nav theme={theme} toggle={toggle} profile={profile} />
         <main>
-          <Hero profile={profile} />
+          <Hero profile={profile} skills={skills} />
           <About profile={profile} skills={skills} />
           <Stack skills={skills} />
           <Projects projects={projects} profile={profile} />

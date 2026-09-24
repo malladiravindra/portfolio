@@ -39,7 +39,9 @@ function buildTypingSvgUrl(lines: string[]) {
 export default function Hero({ profile, skills }: { profile: Profile; skills: SkillGroup[] }) {
   const shortName = profile.short_name || profile.name
   const [imageFailed, setImageFailed] = useState(false)
-  const showImage = Boolean(profile.profile_image) && !imageFailed
+  // Fall back to the photo bundled in frontend/public when the API has none set.
+  const profileImage = profile.profile_image || '/profile.jpg'
+  const showImage = !imageFailed
 
   // One representative skill per category (language, backend, frontend, ...)
   // for a cross-stack badge row — the full grouped breakdown lives in the
@@ -173,7 +175,7 @@ export default function Hero({ profile, skills }: { profile: Profile; skills: Sk
             >
               {showImage ? (
                 <img
-                  src={profile.profile_image}
+                  src={profileImage}
                   alt={shortName}
                   loading="eager"
                   onError={() => setImageFailed(true)}

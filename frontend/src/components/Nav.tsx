@@ -48,6 +48,21 @@ export default function Nav({
     return () => observer.disconnect()
   }, [])
 
+  // Scroll in JS rather than relying on the #hash jump: on mobile the menu
+  // collapses at the same moment, which shrinks the sticky header and leaves
+  // the browser's scroll target stale (Home in particular went nowhere).
+  const goTo = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const wasOpen = open
+    setOpen(false)
+    window.setTimeout(() => {
+      if (id === 'top') window.scrollTo({ top: 0, behavior: 'smooth' })
+      else document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      history.replaceState(null, '', `#${id}`)
+      setActive(id)
+    }, wasOpen ? 260 : 0)
+  }
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -16 }}
@@ -60,7 +75,7 @@ export default function Nav({
       }`}
     >
       <div className={`container-page flex items-center justify-between gap-4 transition-all duration-300 ${scrolled ? 'h-14' : 'h-16'}`}>
-        <a href="#top" className="shrink-0 font-heading font-bold tracking-tight text-slate-900 dark:text-white">
+        <a href="#top" onClick={goTo('top')} className="shrink-0 font-heading font-bold tracking-tight text-slate-900 dark:text-white">
           {shortName}
         </a>
 
@@ -71,6 +86,7 @@ export default function Nav({
               <a
                 key={item.id}
                 href={`#${item.id}`}
+                onClick={goTo(item.id)}
                 className={`group relative rounded-md px-3 py-2 font-medium transition-colors ${
                   isActive
                     ? 'text-accent'
@@ -99,7 +115,7 @@ export default function Nav({
           <IconLink href={profile.linkedin_url} label="LinkedIn">
             <Linkedin size={17} />
           </IconLink>
-          <a href={profile.resume_url} download className={`px-3.5 py-2 ${btnPrimary}`}>
+          <a href={profile.resume_url} download="Malladi_Ravindra_Resume.pdf" className={`px-3.5 py-2 ${btnPrimary}`}>
             <FileText size={15} /> Resume
           </a>
           <ThemeToggle theme={theme} toggle={toggle} />
@@ -133,7 +149,7 @@ export default function Nav({
                 <a
                   key={item.id}
                   href={`#${item.id}`}
-                  onClick={() => setOpen(false)}
+                  onClick={goTo(item.id)}
                   className="rounded-md px-3 py-2.5 font-medium text-slate-600 transition-colors hover:bg-slate-50
                              dark:text-slate-300 dark:hover:bg-slate-900"
                 >
@@ -147,7 +163,7 @@ export default function Nav({
                 <IconLink href={profile.linkedin_url} label="LinkedIn">
                   <Linkedin size={17} />
                 </IconLink>
-                <a href={profile.resume_url} download className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+                <a href={profile.resume_url} download="Malladi_Ravindra_Resume.pdf" className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
                   <FileText size={15} /> Resume
                 </a>
               </div>

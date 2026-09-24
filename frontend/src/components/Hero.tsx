@@ -129,7 +129,7 @@ export default function Hero({ profile, skills }: { profile: Profile; skills: Sk
               <a href="#contact" className={`px-5 py-2.5 ${btnSecondary}`}>
                 Contact Me
               </a>
-              <a href={profile.resume_url} download className={`px-5 py-2.5 ${btnGhost}`}>
+              <a href={profile.resume_url} download="Malladi_Ravindra_Resume.pdf" className={`px-5 py-2.5 ${btnGhost}`}>
                 <Download size={16} /> Download Resume
               </a>
             </motion.div>

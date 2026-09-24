@@ -133,6 +133,11 @@ CORS_ALLOWED_ORIGINS = env_list(
     'http://localhost:5173,http://127.0.0.1:5173,https://ravindra-sable.vercel.app'
 )
 
+# Vercel gives every preview deploy a new URL (ravindra-<hash>-ravi-651d.vercel.app).
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://ravindra-[a-z0-9]+-ravi-651d\.vercel\.app$',
+]
+
 
 
 # --- Django REST Framework ----------------------------------------------------

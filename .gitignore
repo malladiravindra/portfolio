@@ -14,3 +14,32 @@ Thumbs.db
 
 # Logs
 npm-debug.log*
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+*.egg
+*.pyc
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+
+# Virtual environments
+env/
+venv/
+.env
+.venv
+ENV/
+
+# Secrets / sensitive files
+*.env
+.env.*
+secret_key.txt

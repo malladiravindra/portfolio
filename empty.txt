@@ -1,0 +1,173 @@
+GIT PUSH — VERIFICATION RESULT
+(Local-only file, not committed — per your choice.)
+Date: 2026-09-17
+
+===============================================================================
+1. PRE-PUSH CHECKS
+===============================================================================
+Current branch:        main
+Remote URL:             https://github.com/malladiravindra/portifolo.git
+                        (fetch + push, same URL)
+
+git status (before staging) showed:
+  - 27 modified tracked files (backend models/serializers/admin/views,
+    frontend components, index.html)
+  - 5 deleted tracked files (HeroVisual.tsx and the 4 old hardcoded
+    frontend/src/data/*.ts files)
+  - 1 modified tracked file excluded on purpose: backend/db.sqlite3
+  - New untracked content: 2 new Django apps (certifications, services),
+    5 new migration files, 4 new frontend files (Certifications.tsx,
+    Services.tsx, usePortfolioData.ts, lib/api.ts)
+  - 1 untracked file excluded on purpose: empty.txt
+
+Recent commits (before this push), newest first:
+  dde8317 Allow Render host in ALLOWED_HOSTS and add root health endpoint
+  2fdafdf Separate frontend into its own top-level folder
+  300ca3b Merge existing remote history (previously deleted index.html)...
+  2ee1453 Update portfolio UI animations and project data
+  c9c2769 Delete index.html
+  8eda974 Add files via upload
+
+Remote-ahead check (git fetch + git rev-list --left-right --count
+HEAD...origin/main), run BEFORE staging anything:
+  Result: 0 ahead / 0 behind — origin/main had nothing local didn't
+  already have. No divergence, no risk of overwriting remote history.
+
+===============================================================================
+2. CONTENT REVIEW (secrets / unwanted files)
+===============================================================================
+- Searched all diffs and all new files for password/secret/API-key/
+  token/private-key patterns: nothing found.
+- Confirmed the only .env-like files on disk are backend/.env.example and
+  frontend/.env.example (safe placeholder templates) — no real .env file
+  exists to accidentally include.
+- backend/db.sqlite3: modified, but backend/.gitignore already lists
+  db.sqlite3 (it's tracked only because it was committed to the repo
+  before that ignore rule existed). Per your instruction and your
+  decision, this was left OUT of the commit — its local modifications
+  were never staged.
+- empty.txt: internal audit/verification notes from this session, not
+  portfolio content. Per your decision, left OUT of the commit —
+  untracked, local-only.
+- __pycache__/*.pyc files inside the two new Django apps (certifications,
+  services) were automatically excluded by the existing
+  backend/.gitignore (`__pycache__/`) — confirmed via a dry-run add
+  before staging; none were ever staged.
+- No other generated/build artifacts, backups, or unrelated files were
+  present among the changes.
+
+===============================================================================
+3. FILES ACTUALLY COMMITTED (61 files)
+===============================================================================
+Modified (27):
+  backend/config/settings.py
+  backend/config/urls.py
+  backend/projects/admin.py
+  backend/projects/models.py
+  backend/projects/serializers.py
+  backend/siteinfo/models.py
+  backend/siteinfo/serializers.py
+  backend/techstack/admin.py
+  backend/techstack/models.py
+  backend/techstack/serializers.py
+  backend/timeline/admin.py
+  backend/timeline/models.py
+  backend/timeline/serializers.py
+  backend/timeline/views.py
+  frontend/index.html
+  frontend/src/App.tsx
+  frontend/src/components/About.tsx
+  frontend/src/components/Contact.tsx
+  frontend/src/components/Education.tsx
+  frontend/src/components/ExperienceTimeline.tsx
+  frontend/src/components/FeaturedProject.tsx
+  frontend/src/components/Footer.tsx
+  frontend/src/components/Hero.tsx
+  frontend/src/components/Nav.tsx
+  frontend/src/components/ProjectCard.tsx
+  frontend/src/components/Projects.tsx
+  frontend/src/components/Stack.tsx
+
+Deleted (5):
+  frontend/src/components/HeroVisual.tsx
+  frontend/src/data/projects.ts
+  frontend/src/data/site.ts
+  frontend/src/data/techstack.ts
+  frontend/src/data/timeline.ts
+
+Added (29):
+  backend/certifications/{__init__.py, admin.py, apps.py, models.py,
+    serializers.py, tests.py, urls.py, views.py,
+    migrations/__init__.py, migrations/0001_initial.py}
+  backend/services/{__init__.py, admin.py, apps.py, models.py,
+    serializers.py, tests.py, urls.py, views.py,
+    migrations/__init__.py, migrations/0001_initial.py}
+  backend/projects/migrations/0003_project_created_at_project_github_url_project_image_and_more.py
+  backend/siteinfo/migrations/0003_profile_availability_status_profile_created_at_and_more.py
+  backend/siteinfo/migrations/0004_profile_short_name.py
+  backend/techstack/migrations/0003_stackitem_icon_stackitem_is_active_and_more.py
+  backend/timeline/migrations/0003_timelinetech.py
+  frontend/src/components/Certifications.tsx
+  frontend/src/components/Services.tsx
+  frontend/src/hooks/usePortfolioData.ts
+  frontend/src/lib/api.ts
+
+Deliberately excluded from staging (left as local, uncommitted changes):
+  backend/db.sqlite3   (still shows "modified" locally)
+  empty.txt            (still shows "untracked" locally)
+
+===============================================================================
+4. COMMIT
+===============================================================================
+Commit: 905f77933163a22c71e118922abdf943f9bdf963
+Author: Malladi Ravindra <malladiravindra1@gmail.com>
+Date:   2026-09-17 12:05:08 +0530
+Message:
+  feat: wire portfolio frontend to Django API, add services/certifications
+
+  Extends the existing APIView-only backend (profile, skills, projects,
+  timeline) with richer fields plus two new apps (certifications,
+  services), and replaces the frontend's hardcoded data files with live
+  API-driven content across every section, including new Services and
+  Certifications sections. Also renders project thumbnail images (with a
+  graceful fallback) and removes the standalone health-check endpoint.
+
+  Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+Stat: 61 files changed, 1055 insertions(+), 471 deletions(-)
+
+Re-verified branch (main) and this exact commit hash were current
+immediately before pushing, and re-fetched origin one more time right
+before the push to confirm origin/main still hadn't moved (still 0
+behind).
+
+===============================================================================
+5. PUSH
+===============================================================================
+Command used (no force flags):
+  git push origin main
+
+Result:
+  To https://github.com/malladiravindra/portifolo.git
+     dde8317..905f779  main -> main
+
+No force push, no history rewrite, no destructive commands were used at
+any point in this operation.
+
+===============================================================================
+6. POST-PUSH VERIFICATION
+===============================================================================
+- git status: "On branch main, Your branch is up to date with
+  'origin/main'." Only the two deliberately-excluded items remain
+  (db.sqlite3 modified locally, empty.txt untracked locally) — nothing
+  else pending.
+- Latest local commit:  905f779 "feat: wire portfolio frontend to Django
+  API, add services/certifications"
+- Latest remote commit (origin/main, re-fetched after push): 905f779,
+  same hash, same message — remote matches local exactly.
+- git rev-list --left-right --count HEAD...origin/main -> "0  0": fully
+  in sync, no divergence in either direction.
+
+===============================================================================
+RESULT: PUSH SUCCEEDED, SAFELY, WITH NOTHING SENSITIVE INCLUDED.
+===============================================================================

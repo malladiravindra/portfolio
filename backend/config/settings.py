@@ -130,11 +130,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = env_list(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:5173,http://127.0.0.1:5173,https://ravindra-sable.vercel.app'
+    'http://localhost:5173,http://127.0.0.1:5173'
 )
 
-# Vercel gives every preview deploy a new URL (ravindra-<hash>-ravi-651d.vercel.app).
+# Production domain, plus the new URL Vercel gives every preview deploy
+# (ravindra-<hash>-ravi-651d.vercel.app). Kept here, not in the env var, so
+# overriding CORS_ALLOWED_ORIGINS on Render can't drop them.
 CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://ravindra-plum\.vercel\.app$',
     r'^https://ravindra-[a-z0-9]+-ravi-651d\.vercel\.app$',
 ]
 
